@@ -44,36 +44,30 @@ The forward pass for the RNN involves the following steps:
 2. **Loop Through Time Steps**: For each time step $t$:
    - **Compute $s(t)$**:
      
-     $$
-     s(t) = W x(t) + R a(t-1)
-     $$
+     $s(t) = W x(t) + R a(t-1)$
+     
      This combines the **current input** and the **memory** from the previous time step.
    - **Compute $a(t)$**:
      
-     $$
-     a(t) = \tanh(s(t))
-     $$
+     $a(t) = \tanh(s(t))$
+     
      This calculates the **hidden state** for the current time step, adding non-linearity to the model.
 
 3. **Output Calculation** (Final Time Step):
    - **Compute $z(T)$**:
      
-     $$
-     z(T) = V a(T)
-     $$
+     $z(T) = V a(T)$
+     
      This calculates the **logit value** at the final time step.
    - **Compute Predicted Output $\hat{y}(T)$**:
      
-     $$
-     \hat{y}(T) = \sigma(z(T))
-     $$
+     $\hat{y}(T) = \sigma(z(T))$
+     
      The sigmoid function converts the logit into a **probability**.
 
 4. **Loss Calculation**: Use **binary cross-entropy** to calculate the loss:
 
-   $$
-   L(z, y) = -y \log(\hat{y}) - (1 - y) \log(1 - \hat{y})
-   $$
+   $L(z, y) = -y \log(\hat{y}) - (1 - y) \log(1 - \hat{y})$
 
 ### Code Representation
 
@@ -200,20 +194,20 @@ import matplotlib.pyplot as plt
 def create_rnn_graph():
     G = nx.DiGraph()
     
-    # Add nodes for time steps t = 1, 2, 3
+    # Add nodes
     for t in range(1, 4):
-        G.add_node(f'x({t})', pos=(t, 4))
-        G.add_node(f'a({t})', pos=(t, 3))
-        G.add_node(f'z({t})', pos=(t, 2))
-        G.add_node(f'L({t})', pos=(t, 1))
+        G.add_node(f'x({t})', pos=(t, 1))
+        G.add_node(f'a({t})', pos=(t, 2))
+        G.add_node(f'z({t})', pos=(t, 3))
+        G.add_node(f'L(z({t}),y({t}))', pos=(t, 4))
     
-    # Add edges showing dependencies
+    # Add edges
     for t in range(1, 4):
-        G.add_edge(f'x({t})', f'a({t})', label='W')
-        G.add_edge(f'a({t})', f'z({t})', label='V')
-        G.add_edge(f'z({t})', f'L({t})', label='Loss')
+        G.add_edge(f'x({t})', f'a({t})',label=f"W")
+        G.add_edge(f'a({t})', f'z({t})', label=f"V")
+        G.add_edge(f'z({t})', f'L(z({t}),y({t}))')
         if t > 1:
-            G.add_edge(f'a({t-1})', f'a({t})', label='R')
+            G.add_edge(f'a({t-1})', f'a({t})', label=f"R")
     
     return G
 
@@ -221,22 +215,26 @@ def draw_rnn_graph(G):
     pos = nx.get_node_attributes(G, 'pos')
     plt.figure(figsize=(12, 8))
     nx.draw(G, pos, with_labels=True, node_color='lightblue', 
-            node_size=3000, arrowsize=20, font_size=10, 
+            node_size=4000, arrowsize=20, font_size=10, 
             font_weight='bold')
     
     # Add edge labels
-    edge_labels = nx.get_edge_attributes(G, 'label')
-    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=8)
+    edge_labels = {(u, v): '' for (u, v) in G.edges()}
+#     nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=8)
+    labels = nx.get_edge_attributes(G, 'label')
+    nx.draw_networkx_edge_labels(G, pos, edge_labels=labels, font_color='black')
     
     plt.title("Computational Graph of Fully Recurrent Network (t = 1, 2, 3)", fontsize=16)
     plt.axis('off')
-    plt.tight_layout()
+#     plt.tight_layout()
     plt.show()
 
 # Create and draw the graph
 G = create_rnn_graph()
 draw_rnn_graph(G)
 ```
+![image](https://hackmd.io/_uploads/rkWHTOSlyl.png)
+
 
 ### Graph Description
 - **Nodes** represent key components at each time step: input ($x(t)$), hidden activation ($a(t)$), logit ($z(t)$), and loss ($L(t)$).
