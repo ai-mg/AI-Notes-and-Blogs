@@ -80,7 +80,9 @@ The optimal weight vector computed with regularization (often referred to in mac
 
 #### Optimal Weight Vector Without Regularization
 The optimal weight vector without regularization is computed using the simple least squares approach. This method minimizes the sum of the squared differences between the observed targets and the targets predicted by the linear model. Mathematically, it is computed as:
-$$ \mathbf{w}^* = (\Phi^T \Phi)^{-1} \Phi^T \mathbf{y} $$
+
+$\mathbf{w}^* = (\Phi^T \Phi)^{-1} \Phi^T \mathbf{y}$
+
 Where:
 - $\Phi$ is the design matrix.
 - $\mathbf{y}$ is the vector of target values.
@@ -88,7 +90,9 @@ Where:
 
 #### Optimal Weight Vector With Regularization
 When regularization is introduced, the equation is modified to include a regularization term $\lambda$ that penalizes the magnitude of the weight coefficients. This approach is aimed at reducing overfitting by discouraging overly complex models:
-$$ \mathbf{w}^*_{\text{reg}} = (\Phi^T \Phi + \lambda I)^{-1} \Phi^T \mathbf{y} $$
+
+$\mathbf{w}^*_{\text{reg}} = (\Phi^T \Phi + \lambda I)^{-1} \Phi^T \mathbf{y}$
+
 Here:
 - $\lambda$ is the regularization parameter.
 - $I$ is the identity matrix of appropriate dimension.
@@ -128,16 +132,13 @@ where:
 
 If we incorporate the $\frac{1}{2}$ factor, the adjusted sum of squared errors (SSE) formula becomes:
 
-$$ \text{SSE}(\mathbf{w}) = \frac{1}{2} \sum_{i=1}^N (t_i - \mathbf{x}_i^\top \mathbf{w})^2 $$
+$\text{SSE}(\mathbf{w}) = \frac{1}{2} \sum_{i=1}^N (t_i - \mathbf{x}_i^\top \mathbf{w})^2$
 
 #### Adjusted Regularized Sum of Squared Errors
 
 Similarly, the regularized sum of squared errors with the $\frac{1}{2}$ factor included would look like:
 
-$$ \text{SSE}_{\text{reg}}(\mathbf{w}) = \frac{1}{2} \sum_{i=1}^N (t_i - \mathbf{x}_i^\top \mathbf{w})^2 + \frac{\lambda}{2} \|\mathbf{w}\|^2 $$
-
-
-
+$\text{SSE}_{\text{reg}}(\mathbf{w}) = \frac{1}{2} \sum_{i=1}^N (t_i - \mathbf{x}_i^\top \mathbf{w})^2 + \frac{\lambda}{2} \|\mathbf{w}\|^2$
 
 ### Probabilistic Perspective
 
